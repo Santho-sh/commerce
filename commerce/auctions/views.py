@@ -8,8 +8,11 @@ from .models import User, Listing, Bid, Comment, Winner, Watchlist
 
 
 def index(request):
+    if User.is_authenticated:
+        return render(request, "auctions/index.html", {'listings':Listing.objects.all()})
     
-    return render(request, "auctions/index.html")
+    else:
+        return redirect('/login')
 
 
 def login_view(request):

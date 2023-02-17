@@ -3,6 +3,9 @@ from .models import User, Listing, Bid, Comment, Watchlist, Winner
 
 # Register your models here.
 
+class imageAdmin(admin.ModelAdmin):
+    list_display = ["title", "photo"]
+
 admin.site.register(User)
 admin.site.register(Listing)
 admin.site.register(Bid)

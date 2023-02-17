@@ -9,15 +9,15 @@ class User(AbstractUser):
 class Listing(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
-    description = models.TextField()
+    category = models.CharField(max_length=100, default=None)
+    description = models.TextField(default=None)
     starting_bid = models.FloatField()
     image = models.ImageField(upload_to='images', default=None)
     created = models.DateTimeField(auto_now_add=True)
     sold = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Bid(models.Model):
