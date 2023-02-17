@@ -25,11 +25,14 @@ def categories(request):
     
 def create(request):
     if request.method == 'POST':
-        title = request.POST['title']
-        description = request.POST['description']
-        starting_bid = request.POST['bid']
-        image = request.POST['image']
-        category = request.POST['category']
+        form = CreateForm(request.POST)
+        if form.is_valid:
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            staring_bid = form.cleaned_data['staring_bid']
+            image = form.cleaned_data['image']
+            category = form.cleaned_data['category']
+            
         
     form = CreateForm()
     return render(request, 'auctions/create.html', {'form':form})
