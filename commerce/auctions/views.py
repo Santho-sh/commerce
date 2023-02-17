@@ -33,8 +33,14 @@ def create(request):
             image = form.cleaned_data['image']
             category = form.cleaned_data['category']
             
-        
-    form = CreateForm()
+            staring_bid = float(f"{staring_bid:.2f}")
+            
+            lg = Listing(title=title, description=description, staring_bid=staring_bid, image=image, category=category)
+            lg.save()
+            
+            return redirect('/')
+    else:
+        form = CreateForm()
     return render(request, 'auctions/create.html', {'form':form})
     
     
