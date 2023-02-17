@@ -1,3 +1,22 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     padding: 10px;
+}
+
+.listing {
+    display: flex;
+    height: 15rem;
+    gap: 3rem;
+    padding: 2rem;
+}
+
+.listing img {
+
+    height: 10rem;
 }
