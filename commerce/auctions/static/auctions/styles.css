@@ -57,44 +57,15 @@ body {
 
 /* create listing page */
 
-.create {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 60vw;
-    margin-top: 2rem;
-}
 
 .create button {
     width: 7rem;
 }
 
-.create input {
-    height: 2rem;
-    padding: .5rem;
-    border-radius: 5px;
-    border: 1px solid gray;
-}
 
-.create textarea {
-    padding: .5rem;
-    border-radius: 5px;
-}
+@media(max-width: 1000px) {
 
-input.img-input {
-    height: 2.8rem;
-    border: none;
-}
-
-
-@media (max-width: 1000px) {
-
-    body{
+    body {
         padding: 1rem;
     }
-
-    .create{
-        width: 90vw;
-    }
-
 }

@@ -6,6 +6,7 @@ from django.urls import reverse
 
 from .models import User, Listing, Bid, Comment, Winner, Watchlist
 
+from .forms import CreateForm
 
 def index(request):
     if User.is_authenticated:
@@ -24,9 +25,14 @@ def categories(request):
     
 def create(request):
     if request.method == 'POST':
-        ...
+        title = request.POST['title']
+        description = request.POST['description']
+        starting_bid = request.POST['bid']
+        image = request.POST['image']
+        category = request.POST['category']
         
-    return render(request, 'auctions/create.html')
+    form = CreateForm()
+    return render(request, 'auctions/create.html', {'form':form})
     
     
 def watchlist(request):
