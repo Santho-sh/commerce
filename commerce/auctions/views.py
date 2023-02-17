@@ -8,6 +8,7 @@ from .models import User, Listing, Bid, Comment, Winner, Watchlist
 
 
 def index(request):
+    
     return render(request, "auctions/index.html")
 
 
