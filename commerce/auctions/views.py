@@ -25,23 +25,23 @@ def categories(request):
     
 def create(request):
     if request.method == 'POST':
-        form = CreateForm(request.POST)
-        if form.is_valid:
-            title = form.cleaned_data['title']
-            description = form.cleaned_data['description']
-            staring_bid = form.cleaned_data['staring_bid']
-            image = form.cleaned_data['image']
-            category = form.cleaned_data['category']
+        form = CreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            description = form.cleaned_data.get('description')
+            staring_bid = form.cleaned_data.get('staring_bid')
+            image = form.cleaned_data.get('image')
+            category = form.cleaned_data.get('category')
             
             staring_bid = float(f"{staring_bid:.2f}")
             
-            lg = Listing(title=title, description=description, staring_bid=staring_bid, image=image, category=category)
+            lg = Listing.objects.create(title=title, description=description, staring_bid=staring_bid, image=image, category=category)
             lg.save()
             
             return redirect('/')
     else:
         form = CreateForm()
-    return render(request, 'auctions/create.html', {'form':form})
+        return render(request, 'auctions/create.html', {'form':form})
     
     
 def watchlist(request):
