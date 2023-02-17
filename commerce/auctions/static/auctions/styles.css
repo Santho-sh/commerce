@@ -10,14 +10,6 @@ body {
 
 }
 
-@media (max-width: 1000px) {
-
-    body{
-        padding: 1rem;
-    }
-    
-}
-
  /* index page active listigs */
 .listings {
     display: flex;
@@ -61,4 +53,48 @@ body {
 
 .listing-page ul {
     padding: 0 2rem;
+}
+
+/* create listing page */
+
+.create {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 60vw;
+    margin-top: 2rem;
+}
+
+.create button {
+    width: 7rem;
+}
+
+.create input {
+    height: 2rem;
+    padding: .5rem;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.create textarea {
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+input.img-input {
+    height: 2.8rem;
+    border: none;
+}
+
+
+@media (max-width: 1000px) {
+
+    body{
+        padding: 1rem;
+    }
+
+    .create{
+        width: 90vw;
+    }
+
 }

@@ -23,7 +23,10 @@ def categories(request):
     
     
 def create(request):
-    pass
+    if request.method == 'POST':
+        ...
+        
+    return render(request, 'auctions/create.html')
     
     
 def watchlist(request):

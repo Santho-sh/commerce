@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h3>Create Listing</h3>
+    <form class='create' action={% url 'create' %} method='post'>
+        <input type='text' name='title' placeholder='Title'>
+        <textarea name='description' placeholder='Description'></textarea>
+        <input type='number' name='bid' placeholder='Starting Bid'>
+        <input class='img-input' type="file" name="image" accept="image/*">
+        <input type='text' name='category' placeholder='Category'>
+        <button class='btn btn-primary'>Create</button>
+    </form>
+{% endblock %}
