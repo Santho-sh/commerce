@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class='listing-page'>
+        <h3>Listing: {{ listing.title }}</h3>
+        <button class='watchlist btn btn-info'>Watchlist</button>
+        <img src={{ listing.image.url }} alt={{listing.title}}>
+        <p>{{ listing.description }}</p>
+        <h4>${{ listing.starting_bid }}</h4>
+        <input type='number' min={{ listing.starting_bid }} placeholder='Bid'>
+        <button class='place-bid btn btn-primary'>Place Bid</button>
+        
+        <h5>Details</h5>
+            <ul>
+                <li> Listed by: Santhosh</li>
+                <li> Category: {{ listing.category }}</li> 
+            </ul>
+    </div>
+{% endblock %}

@@ -13,6 +13,21 @@ def index(request):
     
     else:
         return redirect('/login')
+    
+def listing(request, id):
+    product = Listing.objects.get(pk=id)
+    return render(request, 'auctions/listing.html', {'listing':product})
+    
+def categories(request):
+    pass
+    
+    
+def create(request):
+    pass
+    
+    
+def watchlist(request):
+    pass
 
 
 def login_view(request):

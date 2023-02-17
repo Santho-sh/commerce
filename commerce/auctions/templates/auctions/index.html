@@ -5,7 +5,7 @@
     <h2>Active Listings</h2>
     {% if listings %}
         {% for listing in listings %}
-        <div class='listing' >
+        <div class='listings' >
             <img src='{{ listing.image.url }}' alt='{{ listing.title }}'>
             <div class='listing-info'>
                 <h4>{{ listing.title }}</h4>
