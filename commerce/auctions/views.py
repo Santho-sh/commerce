@@ -149,7 +149,28 @@ def comment(request):
 
 
 def close(request):
-    ...
+    if request.method == 'POST':
+        id = int(request.POST['id'])
+        
+        listing = Listing.objects.get(pk=id)
+        listing.sold = True
+        listing.save()
+        
+        price = listing.current_price
+        
+        win_bid = Bid.objects.get(bid=price, listing=listing)
+        
+        winner = win_bid.bidder
+        
+        win = Winner.objects.create(listing=listing,
+                                    winner=winner,
+                                    price=price)
+        win.save()
+        
+        return redirect('/listing/%i' %id)
+    else:
+        return redirect('/')
+
 
 def categories(request):
     pass

@@ -1,42 +1,63 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+
     <div class='listing-page'>
+
         <h3>Listing: {{ listing.title }}</h3>
-        <form action={% url 'watchlist' %} method='post'>
-            {% csrf_token %}
-            <input type="hidden" name="id" value="{{ listing.id }}">
-            <button class='watchlist btn btn-info'>Watchlist</button>
-        </form>
-        <img src={{ listing.image.url }} alt={{listing.title}}>
-        <p>{{ listing.description }}</p>
-        <h4>${{ highest_bid|floatformat:2 }}</h4>
-        
-        {% if bidder == user %}
-            <p>{{ bids }} bid(s) so far. Your Bid is current bid.</p>
-        {% else %}
-            <p>{{ bids }} bid(s) so far. Current bidder: {{ bidder }}</p>
-        {% endif %}
         
         {% if user.is_authenticated %}
-            {% if user ==  listing.seller %}
-                <form>
-                    <button class='place-bid btn btn-primary'>Close Bidding</button>
-                </form>
+        <!-- Watchlist -->
+            <form action={% url 'watchlist' %} method='post'>
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ listing.id }}">
+                <button class='watchlist btn btn-info'>Watchlist</button>
+            </form>
+        {% endif %}
+
+        <img src={{ listing.image.url }} alt={{listing.title}}>
+
+        <p>{{ listing.description }}</p>
+        
+        {% if user.is_authenticated %}
+            {% if listing.sold == False%}
+
+                <h4>${{ highest_bid|floatformat:2 }}</h4>
+
+                <!-- bids -->
+                {% if bidder == user %}
+                    <p>{{ bids }} bid(s) so far. Your Bid is current bid.</p>
+                {% else %}
+                    <p>{{ bids }} bid(s) so far. Current bidder: {{ bidder }}</p>
+                {% endif %}
+
+                <!-- make bid -->
+                {% if user ==  listing.seller %}
+                    <form action={% url 'close' %} method='post'>
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ listing.id }}">
+                        <button class='place-bid btn btn-primary'>Close Bidding</button>
+                    </form>
+                <!-- close listing for owner -->
+                {% else %}
+                    <form action={% url 'bid' listing.id %} method='post'>
+                        {% csrf_token %}
+                        <input name='bid' type='number' min={{ highest_bid }} placeholder='Bid' step="0.01">
+                        <button class='place-bid btn btn-primary'>Place Bid</button>
+                    </form>
+                {% endif %}
             {% else %}
-                <form action={% url 'bid' listing.id %} method='post'>
-                    {% csrf_token %}
-                    <input name='bid' type='number' min={{ highest_bid }} placeholder='Bid' step="0.01">
-                    <button class='place-bid btn btn-primary'>Place Bid</button>
-                </form>
+                    <h5>Product Sold For ${{ listing.current_price|floatformat:2 }}</h5>
             {% endif %}
         {% endif %}
-        
+        <!-- details -->
         <h5>Details</h5>
             <ul>
                 <li> Listed by: {{ listing.seller }}</li>
                 <li> Category: {{ listing.category }}</li> 
             </ul>
+
+        <!-- comments -->
         <h5>Comments</h5>
         {% if comments %}
             {% for comment in comments %}
@@ -45,11 +66,14 @@
         {% else %}
             <p>No comments</p>
         {% endif %}
-        <form action={% url 'comment' %} method='post'>
-            {% csrf_token %}
-            <input type="hidden" name="id" value="{{ listing.id }}">
-            <input  type='text' name='comment' placeholder='Comment'>
-            <button class='btn btn-primary'>Comment</button>
-        </form>
+        <!-- make comment -->
+        {% if user.is_authenticated %}
+            <form action={% url 'comment' %} method='post'>
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ listing.id }}">
+                <input  type='text' name='comment' placeholder='Comment'>
+                <button class='btn btn-primary'>Comment</button>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}

@@ -48,5 +48,5 @@ class Watchlist(models.Model):
 class Winner(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     winner = models.ForeignKey(User, on_delete=models.CASCADE)
-    bid = models.IntegerField()
+    price = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
