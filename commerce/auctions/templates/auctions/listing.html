@@ -6,13 +6,13 @@
         <button class='watchlist btn btn-info'>Watchlist</button>
         <img src={{ listing.image.url }} alt={{listing.title}}>
         <p>{{ listing.description }}</p>
-        <h4>${{ listing.starting_bid }}</h4>
+        <h4>${{ listing.starting_bid|floatformat:2 }}</h4>
         <input type='number' min={{ listing.starting_bid }} placeholder='Bid'>
         <button class='place-bid btn btn-primary'>Place Bid</button>
         
         <h5>Details</h5>
             <ul>
-                <li> Listed by: Santhosh</li>
+                <li> Listed by: {{listing.seller}}</li>
                 <li> Category: {{ listing.category }}</li> 
             </ul>
     </div>
