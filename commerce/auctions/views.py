@@ -12,20 +12,29 @@ from .forms import CreateForm
 def index(request):
     if User.is_authenticated:
         return render(request, "auctions/index.html", {'listings':Listing.objects.all()})
-    
+
     else:
         return redirect('/login')
     
 def listing(request, id):
     product = Listing.objects.get(pk=id)
-    highest_bid = Bid.objects.filter(listing=product).aggregate(Max('bid'))['bid__max']
+    bids = Bid.objects.filter(listing=product)
+    highest_bid = bids.aggregate(Max('bid'))['bid__max']
+    no_bids = bids.count()
+    highest_bidder = Bid.objects.get(listing=product, bid=highest_bid).bidder
     
     if highest_bid == None:
         highest_bid = product.starting_bid
+        bids = 0
+    print(type(highest_bidder), type(request.user.username))
+    return render(request, 'auctions/listing.html', {
+    'listing':product,
+    'highest_bid':highest_bid,
+    'bids':no_bids,
+    'bidder':highest_bidder,
+    'user': request.user,
+    })
 
-    return render(request, 'auctions/listing.html', {'listing':product, 'highest_bid':highest_bid})
-    
-    
 def create(request):
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)
