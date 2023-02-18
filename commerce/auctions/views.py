@@ -180,6 +180,12 @@ def categories(request):
       'listings':listings,                       })
 
 
+def myListings(request):
+    listings = Listing.objects.filter(seller=request.user)
+    
+    return render(request,'auctions/myListings.html', {'listings':listings})
+
+
 def login_view(request):
     if request.method == "POST":
 
