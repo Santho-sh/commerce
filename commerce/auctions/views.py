@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Max
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Listing, Bid, Comment, Winner, Watchlist
 
@@ -44,7 +45,8 @@ def listing(request, id):
     'bidder':highest_bidder,
     'comments':comments,
     })
-
+    
+@login_required
 def create(request):
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)
@@ -73,7 +75,7 @@ def create(request):
         form = CreateForm()
     return render(request, 'auctions/create.html', {'form':form})
     
-    
+@login_required    
 def bid(request, id):
     if request.method == 'POST':
         bid_amount = float(request.POST['bid'])
@@ -95,7 +97,7 @@ def bid(request, id):
         
     return redirect('/listing/%i' %id)
     
-    
+@login_required    
 def watchlist(request):
     if request.method == 'POST':
         
@@ -120,7 +122,7 @@ def watchlist(request):
         
         return render(request, 'auctions/watchlist.html', {'listings':listings_all})
 
-
+@login_required
 def remove(request):
     if request.method == 'POST':
         id = int(request.POST['id'])
@@ -131,7 +133,7 @@ def remove(request):
         
     return redirect('/watchlist')
 
-
+@login_required
 def comment(request):
     if request.method == 'POST':
         id = int(request.POST['id'])
@@ -147,7 +149,7 @@ def comment(request):
     else:
         return redirect('/')
 
-
+@login_required
 def close(request):
     if request.method == 'POST':
         id = int(request.POST['id'])
@@ -179,7 +181,7 @@ def categories(request):
     return render(request, 'auctions/category.html', {'categories':categories,
       'listings':listings,                       })
 
-
+@login_required
 def myListings(request):
     listings = Listing.objects.filter(seller=request.user)
     
