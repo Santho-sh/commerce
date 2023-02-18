@@ -17,16 +17,19 @@ def index(request):
         return redirect('/login')
     
 def listing(request, id):
-    product = Listing.objects.get(pk=id)
-    bids = Bid.objects.filter(listing=product)
-    highest_bid = bids.aggregate(Max('bid'))['bid__max']
-    no_bids = bids.count()
-    highest_bidder = Bid.objects.get(listing=product, bid=highest_bid).bidder
     
-    if highest_bid == None:
+    product = Listing.objects.get(pk=id)
+    try:
+        bids = Bid.objects.filter(listing=product)
+        highest_bid = bids.aggregate(Max('bid'))['bid__max']
+        no_bids = bids.count()  
+        highest_bidder = Bid.objects.get(listing=product, bid=highest_bid).bidder
+    
+    except Bid.DoesNotExist:
         highest_bid = product.starting_bid
         bids = 0
-    print(type(highest_bidder), type(request.user.username))
+        highest_bidder = None
+        
     return render(request, 'auctions/listing.html', {
     'listing':product,
     'highest_bid':highest_bid,
@@ -55,6 +58,7 @@ def create(request):
             lg.save()
             
             return redirect('/')
+        
     else:
         form = CreateForm()
     return render(request, 'auctions/create.html', {'form':form})
@@ -66,23 +70,36 @@ def bid(request, id):
 
         listing = Listing.objects.get(pk=id)
         
-        
-        bid = Bid.objects.create(
-            listing=listing,
-            bidder=request.user,
-            bid=bid_amount,
-            )
-        bid.save()
+        if bid_amount > listing.starting_bid:
+            
+            bid = Bid.objects.create(
+                listing=listing,
+                bidder=request.user,
+                bid=bid_amount,
+                )
+            bid.save()
+
     return redirect('/listing/%i' %id)
     
     
 def watchlist(request):
-    pass
-
+    if request.method == 'POST':
+        id = int(request.POST['id'])
+        print(id)
+        return redirect('/listing/%i' %id)
+    else:
+        try:
+            user = Watchlist.objects.get(user=request.user)
+            listings = user.listings
+            listings_all = listings.all()
+        except Watchlist.DoesNotExist:
+            listings_all = None
+        
+        return render(request, 'auctions/watchlist.html', {'listings':listings_all})
 
 def categories(request):
     pass
-    
+
 
 def login_view(request):
     if request.method == "POST":
