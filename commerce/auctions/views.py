@@ -173,7 +173,11 @@ def close(request):
 
 
 def categories(request):
-    pass
+    categories = Listing.objects.values('category').distinct()
+    listings = Listing.objects.all()
+    
+    return render(request, 'auctions/category.html', {'categories':categories,
+      'listings':listings,                       })
 
 
 def login_view(request):
