@@ -15,7 +15,11 @@
             </form>
         {% endif %}
 
-        <img src={{ listing.image.url }} alt={{listing.title}}>
+        {% if listing.image %}
+            <img src='{{ listing.image.url }}' alt='{{ listing.title }}'>
+        {% else %}
+            <img src='/images/none.jpg' alt='{{ listing.title }}'>
+        {% endif %}
 
         <p>{{ listing.description }}</p>
         
