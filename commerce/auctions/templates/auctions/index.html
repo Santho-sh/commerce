@@ -14,7 +14,7 @@
                     <h4>{{ listing.title }}</h4>
                 </a>
                 <p>{{ listing.description }}</p>
-                <p><b>Price: </b>${{ listing.starting_bid|floatformat:2 }}</p>
+                <p><b>Price: </b>${{ listing.current_price|floatformat:2 }}</p>
                 <p>created: {{ listing.created }}</p>
             </div>
         </div>

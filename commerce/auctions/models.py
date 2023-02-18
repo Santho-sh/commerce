@@ -12,6 +12,7 @@ class Listing(models.Model):
     category = models.CharField(max_length=100, default=None)
     description = models.TextField(default=None)
     starting_bid = models.FloatField()
+    current_price = models.FloatField()
     image = models.ImageField(upload_to='images', default=None)
     created = models.DateTimeField(auto_now_add=True)
     sold = models.BooleanField(default=False)

@@ -11,7 +11,11 @@ from .forms import CreateForm
 
 def index(request):
     if User.is_authenticated:
-        return render(request, "auctions/index.html", {'listings':Listing.objects.all()})
+        bids = Bid.objects.all()
+        highest_bid = bids.aggregate(Max('bid'))['bid__max']
+        return render(request, "auctions/index.html", {'listings':Listing.objects.all(),
+          'current_price':highest_bid                  
+          })
 
     else:
         return redirect('/login')
@@ -79,7 +83,11 @@ def bid(request, id):
                 bid=bid_amount,
                 )
             bid.save()
-
+            
+            listing = Listing.objects.get(pk=id)
+            listing.current_price = bid_amount
+            listing.save()
+        
     return redirect('/listing/%i' %id)
     
     
