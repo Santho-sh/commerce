@@ -41,6 +41,11 @@ body {
     border: 1px solid gray;
 }
 
+.listing-page form {
+    display: flex;
+    gap: 1.2rem;
+}
+
 .watchlist {
     width: 5rem;
     height: 2rem;
@@ -48,7 +53,7 @@ body {
 }
 
 .place-bid {
-    width: 8rem;
+    width: 6rem;
 }
 
 .listing-page ul {

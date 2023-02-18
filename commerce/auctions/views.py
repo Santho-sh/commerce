@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.db.models import Max
 
 from .models import User, Listing, Bid, Comment, Winner, Watchlist
 
@@ -17,10 +18,12 @@ def index(request):
     
 def listing(request, id):
     product = Listing.objects.get(pk=id)
-    return render(request, 'auctions/listing.html', {'listing':product})
+    highest_bid = Bid.objects.filter(listing=product).aggregate(Max('bid'))['bid__max']
     
-def categories(request):
-    pass
+    if highest_bid == None:
+        highest_bid = product.starting_bid
+
+    return render(request, 'auctions/listing.html', {'listing':product, 'highest_bid':highest_bid})
     
     
 def create(request):
@@ -48,9 +51,29 @@ def create(request):
     return render(request, 'auctions/create.html', {'form':form})
     
     
+def bid(request, id):
+    if request.method == 'POST':
+        bid_amount = float(request.POST['bid'])
+
+        listing = Listing.objects.get(pk=id)
+        
+        
+        bid = Bid.objects.create(
+            listing=listing,
+            bidder=request.user,
+            bid=bid_amount,
+            )
+        bid.save()
+    return redirect('/listing/%i' %id)
+    
+    
 def watchlist(request):
     pass
 
+
+def categories(request):
+    pass
+    
 
 def login_view(request):
     if request.method == "POST":

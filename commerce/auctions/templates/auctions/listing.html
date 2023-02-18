@@ -6,9 +6,12 @@
         <button class='watchlist btn btn-info'>Watchlist</button>
         <img src={{ listing.image.url }} alt={{listing.title}}>
         <p>{{ listing.description }}</p>
-        <h4>${{ listing.starting_bid|floatformat:2 }}</h4>
-        <input type='number' min={{ listing.starting_bid }} placeholder='Bid'>
-        <button class='place-bid btn btn-primary'>Place Bid</button>
+        <h4>${{ highest_bid|floatformat:2 }}</h4>
+        <form action={% url 'bid' listing.id %} method='post'>
+            {% csrf_token %}
+            <input name='bid' type='number' min={{ highest_bid }} placeholder='Bid' step="0.01">
+            <button class='place-bid btn btn-primary'>Place Bid</button>
+        </form>
         
         <h5>Details</h5>
             <ul>

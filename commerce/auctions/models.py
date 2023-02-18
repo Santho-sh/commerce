@@ -23,7 +23,7 @@ class Listing(models.Model):
 class Bid(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     bidder = models.ForeignKey(User,on_delete=models.CASCADE)
-    bid = models.IntegerField()
+    bid = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
