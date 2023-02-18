@@ -29,19 +29,23 @@ def create(request):
         if form.is_valid():
             title = form.cleaned_data.get('title')
             description = form.cleaned_data.get('description')
-            staring_bid = form.cleaned_data.get('staring_bid')
+            starting_bid = form.cleaned_data.get('starting_bid')
             image = form.cleaned_data.get('image')
             category = form.cleaned_data.get('category')
             
-            staring_bid = float(f"{staring_bid:.2f}")
+            starting_bid = float(f"{starting_bid:.2f}")
+            user_id = request.user
             
-            lg = Listing.objects.create(title=title, description=description, staring_bid=staring_bid, image=image, category=category)
+            lg = Listing.objects.create(
+                seller=user_id,
+                title=title, description=description, starting_bid=starting_bid, image=image, category=category,
+                )
             lg.save()
             
             return redirect('/')
     else:
         form = CreateForm()
-        return render(request, 'auctions/create.html', {'form':form})
+    return render(request, 'auctions/create.html', {'form':form})
     
     
 def watchlist(request):
