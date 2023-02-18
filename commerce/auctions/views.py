@@ -28,13 +28,15 @@ def listing(request, id):
         highest_bid = bids.aggregate(Max('bid'))['bid__max']
         no_bids = bids.count()  
         highest_bidder = Bid.objects.get(listing=product, bid=highest_bid).bidder
-        comments = Comment.objects.filter(listing=product)
+        
     
     except Bid.DoesNotExist:
         highest_bid = product.starting_bid
         bids = 0
         highest_bidder = None
-        
+    
+    comments = Comment.objects.filter(listing=product)
+    
     return render(request, 'auctions/listing.html', {
     'listing':product,
     'highest_bid':highest_bid,
@@ -58,7 +60,10 @@ def create(request):
             
             lg = Listing.objects.create(
                 seller=user_id,
-                title=title, description=description, starting_bid=starting_bid, image=image, category=category,
+                title=title, description=description, starting_bid=starting_bid,
+                current_price=starting_bid,
+                image=image,
+                category=category,
                 )
             lg.save()
             
