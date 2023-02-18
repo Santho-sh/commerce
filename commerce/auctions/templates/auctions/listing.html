@@ -37,5 +37,19 @@
                 <li> Listed by: {{ listing.seller }}</li>
                 <li> Category: {{ listing.category }}</li> 
             </ul>
+        <h5>Comments</h5>
+        {% if comments %}
+            {% for comment in comments %}
+                <div>{{ comment.comment }} By {{comment.user}} on {{comment.timestamp}}</div>
+            {% endfor %}
+        {% else %}
+            <p>No comments</p>
+        {% endif %}
+        <form action={% url 'comment' %} method='post'>
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ listing.id }}">
+            <input  type='text' name='comment' placeholder='Comment'>
+            <button class='btn btn-primary'>Comment</button>
+        </form>
     </div>
 {% endblock %}

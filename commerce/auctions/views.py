@@ -24,6 +24,7 @@ def listing(request, id):
         highest_bid = bids.aggregate(Max('bid'))['bid__max']
         no_bids = bids.count()  
         highest_bidder = Bid.objects.get(listing=product, bid=highest_bid).bidder
+        comments = Comment.objects.filter(listing=product)
     
     except Bid.DoesNotExist:
         highest_bid = product.starting_bid
@@ -35,7 +36,7 @@ def listing(request, id):
     'highest_bid':highest_bid,
     'bids':no_bids,
     'bidder':highest_bidder,
-    'user': request.user,
+    'comments':comments,
     })
 
 def create(request):
@@ -110,12 +111,32 @@ def watchlist(request):
 def remove(request):
     if request.method == 'POST':
         id = int(request.POST['id'])
-
+        
         watchlist = Watchlist.objects.get(user=request.user)
         listing = Listing.objects.get(pk=id)
         watchlist.listings.remove(listing)
         
     return redirect('/watchlist')
+
+
+def comment(request):
+    if request.method == 'POST':
+        id = int(request.POST['id'])
+        comment = request.POST['comment']
+
+        listing = Listing.objects.get(pk=id)
+        cmt = Comment.objects.create(comment=comment,
+                                     listing=listing,
+                                     user=request.user,
+                                     )
+        cmt.save()
+        return redirect('/listing/%i' %id)
+    else:
+        return redirect('/')
+
+
+def close(request):
+    ...
 
 def categories(request):
     pass
