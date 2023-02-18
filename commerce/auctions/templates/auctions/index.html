@@ -5,6 +5,7 @@
     <h2>Active Listings</h2>
     {% if listings %}
         {% for listing in listings %}
+        {% if listing.sold == False %}
         <div class='listings' >
             <a href={% url 'listing' listing.id %}>
                 {% if listing.image %}
@@ -22,6 +23,7 @@
                 <p>created: {{ listing.created }}</p>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     {% else %}
         <p>No Active Listings</p>
