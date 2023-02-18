@@ -84,18 +84,38 @@ def bid(request, id):
     
 def watchlist(request):
     if request.method == 'POST':
+        
         id = int(request.POST['id'])
-        print(id)
+        try:
+            watchlist = Watchlist.objects.get(user=request.user)
+        except Watchlist.DoesNotExist:
+            watchlist = Watchlist.objects.create(user=request.user)
+            
+        listing = Listing.objects.get(pk=id)
+        watchlist.listings.add(listing)
+        
         return redirect('/listing/%i' %id)
+    
     else:
         try:
             user = Watchlist.objects.get(user=request.user)
-            listings = user.listings
-            listings_all = listings.all()
+            listings_all = user.listings.all()
+            
         except Watchlist.DoesNotExist:
             listings_all = None
         
         return render(request, 'auctions/watchlist.html', {'listings':listings_all})
+
+
+def remove(request):
+    if request.method == 'POST':
+        id = int(request.POST['id'])
+
+        watchlist = Watchlist.objects.get(user=request.user)
+        listing = Listing.objects.get(pk=id)
+        watchlist.listings.remove(listing)
+        
+    return redirect('/watchlist')
 
 def categories(request):
     pass

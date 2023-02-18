@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<h2>Watch</h2>
+<h2>Watchlist:</h2>
 {% if listings %}
     {% for listing in listings %}
     <div class='listings' >
@@ -15,6 +15,13 @@
             <p>{{ listing.description }}</p>
             <p><b>Price: </b>${{ listing.starting_bid|floatformat:2 }}</p>
             <p>created: {{ listing.created }}</p>
+            
+            <form action={% url 'remove' %} method='post'>
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ listing.id }}">
+                <button class='remove btn btn-danger'>Remove</button>
+            </form>
+        
         </div>
     </div>
     {% endfor %}
