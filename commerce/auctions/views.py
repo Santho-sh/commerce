@@ -7,19 +7,23 @@ from django.db.models import Max
 from django.contrib.auth.decorators import login_required
 
 from .models import User, Listing, Bid, Comment, Winner, Watchlist
-
 from .forms import CreateForm
 
+
 def index(request):
-    if User.is_authenticated:
+    
+    if User.is_authenticated:   
         bids = Bid.objects.all()
         highest_bid = bids.aggregate(Max('bid'))['bid__max']
-        return render(request, "auctions/index.html", {'listings':Listing.objects.all(),
-          'current_price':highest_bid                  
-          })
-
+        
+        return render(request, "auctions/index.html", {
+            'listings':Listing.objects.all(),
+            'current_price':highest_bid                  
+        })
+        
     else:
         return redirect('/login')
+    
     
 def listing(request, id):
     
@@ -29,7 +33,6 @@ def listing(request, id):
         highest_bid = bids.aggregate(Max('bid'))['bid__max']
         no_bids = bids.count()  
         highest_bidder = Bid.objects.get(listing=product, bid=highest_bid).bidder
-        
     
     except Bid.DoesNotExist:
         highest_bid = product.starting_bid
@@ -46,10 +49,13 @@ def listing(request, id):
     'comments':comments,
     })
     
+    
 @login_required
 def create(request):
+    
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)
+        
         if form.is_valid():
             title = form.cleaned_data.get('title')
             description = form.cleaned_data.get('description')
@@ -68,22 +74,21 @@ def create(request):
                 category=category,
                 )
             lg.save()
-            
             return redirect('/')
         
     else:
         form = CreateForm()
     return render(request, 'auctions/create.html', {'form':form})
     
+    
 @login_required    
 def bid(request, id):
+    
     if request.method == 'POST':
         bid_amount = float(request.POST['bid'])
-
         listing = Listing.objects.get(pk=id)
         
         if bid_amount > listing.starting_bid:
-            
             bid = Bid.objects.create(
                 listing=listing,
                 bidder=request.user,
@@ -97,10 +102,11 @@ def bid(request, id):
         
     return redirect('/listing/%i' %id)
     
+    
 @login_required    
 def watchlist(request):
+    
     if request.method == 'POST':
-        
         id = int(request.POST['id'])
         try:
             watchlist = Watchlist.objects.get(user=request.user)
@@ -122,75 +128,86 @@ def watchlist(request):
         
         return render(request, 'auctions/watchlist.html', {'listings':listings_all})
 
+
 @login_required
 def remove(request):
+    
     if request.method == 'POST':
         id = int(request.POST['id'])
-        
         watchlist = Watchlist.objects.get(user=request.user)
         listing = Listing.objects.get(pk=id)
         watchlist.listings.remove(listing)
         
     return redirect('/watchlist')
 
+
 @login_required
 def comment(request):
+    
     if request.method == 'POST':
         id = int(request.POST['id'])
         comment = request.POST['comment']
-
         listing = Listing.objects.get(pk=id)
-        cmt = Comment.objects.create(comment=comment,
-                                     listing=listing,
-                                     user=request.user,
-                                     )
+        
+        cmt = Comment.objects.create(
+            comment=comment,
+            listing=listing,
+            user=request.user,
+        )
         cmt.save()
         return redirect('/listing/%i' %id)
+    
     else:
         return redirect('/')
 
+
 @login_required
 def close(request):
+    
     if request.method == 'POST':
         id = int(request.POST['id'])
-        
         listing = Listing.objects.get(pk=id)
+        
         listing.sold = True
         listing.save()
         
         price = listing.current_price
-        
         win_bid = Bid.objects.get(bid=price, listing=listing)
-        
         winner = win_bid.bidder
         
-        win = Winner.objects.create(listing=listing,
-                                    winner=winner,
-                                    price=price)
+        win = Winner.objects.create(
+            listing=listing,
+            winner=winner,
+            price=price
+        )
         win.save()
-        
         return redirect('/listing/%i' %id)
+    
     else:
         return redirect('/')
 
 
 def categories(request):
+    
     categories = Listing.objects.values('category').distinct()
     listings = Listing.objects.all()
     
-    return render(request, 'auctions/category.html', {'categories':categories,
-      'listings':listings,                       })
+    return render(request, 'auctions/category.html', {
+        'categories':categories,
+        'listings':listings,
+    })
+
 
 @login_required
 def myListings(request):
-    listings = Listing.objects.filter(seller=request.user)
     
+    listings = Listing.objects.filter(seller=request.user)
     return render(request,'auctions/myListings.html', {'listings':listings})
 
 
 def login_view(request):
+    
     if request.method == "POST":
-
         # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
