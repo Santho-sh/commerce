@@ -27,21 +27,33 @@ class Bid(models.Model):
     bid = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
+    def __str__(self):
+        return f'{self.bid} on {self.listing}' 
+    
+    
 class Comment(models.Model):
     comment = models.TextField()
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     
+    def __str__(self):
+        return f'{self.user} on {self.listing}'
+    
     
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listings = models.ManyToManyField(Listing, related_name='watchlist')
     
+    def __str__(self):
+        return f'{self.user}'
+
 
 class Winner(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     winner = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.FloatField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.listing} : {self.winner}'
