@@ -13,12 +13,13 @@ from .forms import CreateForm
 def index(request):
     
     if User.is_authenticated:   
+        listings = Listing.objects.filter(sold=False)
         bids = Bid.objects.all()
         highest_bid = bids.aggregate(Max('bid'))['bid__max']
         
         return render(request, "auctions/index.html", {
-            'listings':Listing.objects.all(),
-            'current_price':highest_bid                  
+            'title':'Active Listings',
+            'listings':listings,
         })
         
     else:
@@ -133,8 +134,11 @@ def watchlist(request):
             
         except Watchlist.DoesNotExist:
             listings_all = None
-        
-        return render(request, 'auctions/watchlist.html', {'listings':listings_all})
+
+        return render(request, "auctions/index.html", {
+                'title':'Watchlist',
+                'listings':listings_all,
+            })
 
 
 @login_required
@@ -210,7 +214,10 @@ def categories(request):
 def myListings(request):
     
     listings = Listing.objects.filter(seller=request.user)
-    return render(request,'auctions/myListings.html', {'listings':listings})
+    return render(request, "auctions/index.html", {
+        'title':'My Listings',
+        'listings':listings,
+    })
 
 
 def login_view(request):

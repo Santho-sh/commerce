@@ -2,10 +2,11 @@
 
 {% block body %}
 
-    <h2>Active Listings</h2>
+    <h3>{{ title }}</h3>
+
     {% if listings %}
         {% for listing in listings %}
-        {% if listing.sold == False %}
+
         <div class='listings' >
             <a href={% url 'listing' listing.id %}>
                 {% if listing.image %}
@@ -25,7 +26,6 @@
                 <p class='created' >Created: {{ listing.created }}</p>
             </div>
         </div>
-        {% endif %}
         {% endfor %}
     {% else %}
         <p>No Active Listings</p>
