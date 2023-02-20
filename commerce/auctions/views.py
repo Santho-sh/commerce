@@ -14,12 +14,13 @@ def index(request):
     
     if User.is_authenticated:   
         listings = Listing.objects.filter(sold=False)
-        bids = Bid.objects.all()
-        highest_bid = bids.aggregate(Max('bid'))['bid__max']
+        watchlist = Watchlist.objects.get(user=request.user.id)
+        no_watchlist=watchlist.listings.count()
         
         return render(request, "auctions/index.html", {
             'title':'Active Listings',
             'listings':listings,
+            'no_watchlist':no_watchlist,
         })
         
     else:
@@ -48,7 +49,12 @@ def listing(request, id):
     
     comments = Comment.objects.filter(listing=product)
     
-    
+    try:
+        watchlist = Watchlist.objects.get(user=request.user)
+        no_watchlist = watchlist.listings.count()
+    except Watchlist.DoesNotExist:
+        no_watchlist = 0
+
     return render(request, 'auctions/listing.html', {
     'listing':product,
     'highest_bid':highest_bid,
@@ -56,6 +62,7 @@ def listing(request, id):
     'bidder':highest_bidder,
     'comments':comments,
     'winner':winner,
+    'no_watchlist':no_watchlist,
     })
     
     
@@ -87,7 +94,17 @@ def create(request):
         
     else:
         form = CreateForm()
-    return render(request, 'auctions/create.html', {'form':form})
+        
+    try:
+        watchlist = Watchlist.objects.get(user=request.user)
+        no_watchlist = watchlist.listings.count()
+    except Watchlist.DoesNotExist:
+        no_watchlist = 0
+    
+    return render(request, 'auctions/create.html', {
+        'form':form,
+        'no_watchlist':no_watchlist,
+        })
     
     
 @login_required    
@@ -116,6 +133,7 @@ def bid(request, id):
 def watchlist(request):
     
     if request.method == 'POST':
+        
         id = int(request.POST['id'])
         try:
             watchlist = Watchlist.objects.get(user=request.user)
@@ -131,14 +149,17 @@ def watchlist(request):
         try:
             user = Watchlist.objects.get(user=request.user)
             listings_all = user.listings.all()
-            
+            no_watchlist=user.listings.count()
         except Watchlist.DoesNotExist:
             listings_all = None
+            no_watchlist = 0
 
         return render(request, "auctions/index.html", {
-                'title':'Watchlist',
-                'listings':listings_all,
-            })
+            'title':'Watchlist',
+            'listings':listings_all,
+            'no_watchlist':no_watchlist,
+            'watchlist':True,
+        })
 
 
 @login_required
@@ -203,10 +224,17 @@ def categories(request):
     
     categories = Listing.objects.filter(sold=False).values('category').distinct()
     listings = Listing.objects.all()
+    
+    try:
+        watchlist = Watchlist.objects.get(user=request.user)
+        no_watchlist = watchlist.listings.count()
+    except Watchlist.DoesNotExist:
+        no_watchlist = 0
 
     return render(request, 'auctions/category.html', {
         'categories':categories,
         'listings':listings,
+        'no_watchlist':no_watchlist,
     })
 
 
@@ -214,9 +242,16 @@ def categories(request):
 def myListings(request):
     
     listings = Listing.objects.filter(seller=request.user)
+    try:
+        watchlist = Watchlist.objects.get(user=request.user)
+        no_watchlist = watchlist.listings.count()
+    except Watchlist.DoesNotExist:
+        no_watchlist = 0
+        
     return render(request, "auctions/index.html", {
         'title':'My Listings',
         'listings':listings,
+        'no_watchlist':no_watchlist,
     })
 
 

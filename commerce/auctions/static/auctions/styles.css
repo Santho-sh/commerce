@@ -72,6 +72,11 @@ a:hover {
     gap: 1.2rem;
 }
 
+.close-bidding {
+    width: 8rem !important;
+    font-size: .9rem;
+}
+
 .watchlist {
     width: 5rem;
     height: 2rem;
@@ -80,10 +85,26 @@ a:hover {
 
 .place-bid {
     width: 6rem;
+    font-size: .9rem;
 }
 
 .listing-page ul {
     padding: 0 2rem;
+}
+
+.no-watchlist {
+    background-color: grey;
+    color: white;
+    padding: 2px 4px;
+    margin-left: 3px;
+    font-size: small;
+    border-radius: 4px;
+}
+
+.remove {
+    width: 4rem;
+    height: 1.5rem;
+    font-size: 10px;
 }
 
 /* create listing page */

@@ -28,6 +28,12 @@
                 {% endif %}
                 <p>{{ listing.description.capitalize }}</p>
                 <p class='created' >Created: {{ listing.created }}</p>
+                {% if watchlist %}
+                <form action={% url 'remove' %} methos='post'>
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ listing.id }}">
+                    <button class='remove btn btn-danger' >Remove</button>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

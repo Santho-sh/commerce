@@ -31,7 +31,7 @@
                     <a class="nav-link" href="{% url 'myListings' %}">My Listing</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist<span class='no-watchlist'>{{ no_watchlist }}</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>

@@ -40,7 +40,7 @@
                     <form action={% url 'close' %} method='post'>
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ listing.id }}">
-                        <button class='place-bid btn btn-primary'>Close Bidding</button>
+                        <button class='close-bidding place-bid btn btn-primary'>Close Bidding</button>
                     </form>
                 <!-- close listing for owner -->
                 {% elif user ==  listing.seller and bidder == None %}
@@ -48,8 +48,8 @@
                 {% else %}
                     <form action={% url 'bid' listing.id %} method='post'>
                         {% csrf_token %}
-                        <input name='bid' type='number' min={{ highest_bid }} placeholder='Bid' step="0.01">
-                        <button class='place-bid btn btn-primary'>Place Bid</button>
+                        <input name='bid' type='number' min={{ highest_bid }} placeholder='Bid' step="0.01" style='font-size:.9rem'>
+                        <button class='place-bid btn btn-primary btm-sm'>Place Bid</button>
                     </form>
                 {% endif %}
             {% else %}
@@ -81,8 +81,8 @@
             <form action={% url 'comment' %} method='post'>
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{ listing.id }}">
-                <input  type='text' name='comment' placeholder='Comment'>
-                <button class='btn btn-secondary'>Comment</button>
+                <input  type='text' name='comment' placeholder='Comment' style='font-size:.9rem'>
+                <button class='btn btn-secondary btn-sm'>Comment</button>
             </form>
         {% endif %}
     </div>
