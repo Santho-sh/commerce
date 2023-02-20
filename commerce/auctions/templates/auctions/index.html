@@ -15,12 +15,14 @@
                 {% endif %}
             </a>
             <div class='listing-info'>
-                <a href={% url 'listing' listing.id %}>
-                    <h4>{{ listing.title }}</h4>
-                </a>
-                <p>{{ listing.description }}</p>
+                <div class='listings-heading' >
+                    <a href={% url 'listing' listing.id %}>
+                        <p>{{ listing.title }}</p>
+                    </a>
+                </div>
                 <p><b>Price: </b>${{ listing.current_price|floatformat:2 }}</p>
-                <p>created: {{ listing.created }}</p>
+                <p>{{ listing.description }}</p>
+                <p class='created' >Created: {{ listing.created }}</p>
             </div>
         </div>
         {% endif %}

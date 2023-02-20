@@ -3,11 +3,21 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family:Arial, Helvetica, sans-serif
 }
 
 body {
     padding: 1rem 10rem;
 
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: gray;
 }
 
  /* index page active listigs */
@@ -18,8 +28,24 @@ body {
     padding: 2rem;
 }
 
+.listings-heading {
+    font-size: 1.5rem;
+    font-weight:600;
+}
+
+.listings-heading a{
+    text-decoration: none;
+}
+
+.created {
+    color: gray;
+    font-size: .9rem;
+}
+
 .listings img {
     height: 10rem;
+    object-fit:contain;
+    width: 15rem;
 }
 
 /* listing page */
@@ -67,6 +93,18 @@ body {
     width: 7rem;
 }
 
+.comment {
+    padding-left: 1rem;
+}
+
+.comment span {
+    color: gray;
+    font-size: .7rem;
+}
+
+.category-listing a{
+    color: grey;
+}
 
 @media(max-width: 1000px) {
 

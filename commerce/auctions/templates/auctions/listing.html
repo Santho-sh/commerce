@@ -4,7 +4,7 @@
 
     <div class='listing-page'>
 
-        <h3>Listing: {{ listing.title }}</h3>
+        <h3>{{ listing.title }}</h3>
         
         {% if user.is_authenticated %}
         <!-- Watchlist -->
@@ -69,7 +69,7 @@
         <h5>Comments</h5>
         {% if comments %}
             {% for comment in comments %}
-                <div>{{ comment.comment }} By {{comment.user}} on {{comment.timestamp}}</div>
+                <div class='comment' >{{ comment.comment }} <span>By {{comment.user}} on {{comment.timestamp}}</span></div>
             {% endfor %}
         {% else %}
             <p>No comments</p>
@@ -80,7 +80,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{ listing.id }}">
                 <input  type='text' name='comment' placeholder='Comment'>
-                <button class='btn btn-primary'>Comment</button>
+                <button class='btn btn-secondary'>Comment</button>
             </form>
         {% endif %}
     </div>

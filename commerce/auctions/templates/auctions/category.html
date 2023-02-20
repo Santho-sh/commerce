@@ -5,14 +5,14 @@
         <br>
         {% for category in categories %}
 
-            <h4>{{category.category}}</h4>
+            <h5>{{category.category}}</h5>
             
 
             {% for listing in listings %}
 
                 {% if listing.category == category.category and listing.sold == False %}
 
-                <p>
+                <p class='category-listing'>
                     <a href={% url 'listing' listing.id %} >{{listing.title}}</a>
                 </p>
                 
