@@ -201,9 +201,9 @@ def close(request):
 
 def categories(request):
     
-    categories = Listing.objects.values('category').distinct()
+    categories = Listing.objects.filter(sold=False).values('category').distinct()
     listings = Listing.objects.all()
-    
+
     return render(request, 'auctions/category.html', {
         'categories':categories,
         'listings':listings,

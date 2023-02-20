@@ -5,8 +5,11 @@
         <br>
         {% for category in categories %}
 
-            <h5>{{category.category}}</h5>
-            
+            {% if category.category %}
+                <h5>{{category.category}}</h5>
+            {% else %}
+                <h5>Others</h5>
+            {% endif %}
 
             {% for listing in listings %}
 

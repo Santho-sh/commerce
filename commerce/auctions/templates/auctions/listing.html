@@ -4,7 +4,7 @@
 
     <div class='listing-page'>
 
-        <h3>{{ listing.title }}</h3>
+        <h3>{{ listing.title.title }}</h3>
         
         {% if user.is_authenticated %}
         <!-- Watchlist -->
@@ -21,7 +21,7 @@
             <img src='/images/none.jpg' alt='{{ listing.title }}'>
         {% endif %}
 
-        <p>{{ listing.description }}</p>
+        <p>{{ listing.description.capitalize }}</p>
         
         {% if user.is_authenticated %}
             {% if listing.sold == False%}
@@ -36,13 +36,15 @@
                 {% endif %}
 
                 <!-- make bid -->
-                {% if user ==  listing.seller %}
+                {% if user ==  listing.seller and bidder != None %}
                     <form action={% url 'close' %} method='post'>
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ listing.id }}">
                         <button class='place-bid btn btn-primary'>Close Bidding</button>
                     </form>
                 <!-- close listing for owner -->
+                {% elif user ==  listing.seller and bidder == None %}
+                    <h5>Zero Biddings so far</h5>
                 {% else %}
                     <form action={% url 'bid' listing.id %} method='post'>
                         {% csrf_token %}

@@ -10,7 +10,7 @@
         <div class='listings' >
             <a href={% url 'listing' listing.id %}>
                 {% if listing.image %}
-                    <img src='{{ listing.image.url }}' alt='{{ listing.title }}'>
+                    <img src='{{ listing.image.url }}' alt='{{ listing.title.title }}'>
                 {% else %}
                     <img src='/images/none.jpg' alt='{{ listing.title }}'>
                 {% endif %}
@@ -21,8 +21,12 @@
                         <p>{{ listing.title }}</p>
                     </a>
                 </div>
-                <p><b>Price: </b>${{ listing.current_price|floatformat:2 }}</p>
-                <p>{{ listing.description }}</p>
+                {% if listing.sold == False %}
+                    <p><b>Price: </b>${{ listing.current_price|floatformat:2 }}</p>
+                {% else %}
+                    <p><b>Sold For: </b>${{ listing.current_price|floatformat:2 }}</p>
+                {% endif %}
+                <p>{{ listing.description.capitalize }}</p>
                 <p class='created' >Created: {{ listing.created }}</p>
             </div>
         </div>
