@@ -6,7 +6,11 @@
         {% for category in categories %}
 
             {% if category.category %}
-                <h5>{{category.category}}</h5>
+                <form class='category' action={% url 'categories' %} method='post'>
+                    {% csrf_token %}
+                    <input type="hidden" name="category" value="{{ category.category }}">
+                    <button>{{category.category}}</button>
+                </form>
             {% else %}
                 <h5>Others</h5>
             {% endif %}

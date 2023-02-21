@@ -107,6 +107,17 @@ a:hover {
     font-size: 10px;
 }
 
+.category button{
+    border: none;
+    background-color: white;
+    font-size: 1.3rem;
+    margin-bottom: .5rem;
+}
+
+.category button:hover{
+    color: gray;
+}
+
 /* create listing page */
 
 

@@ -14,8 +14,12 @@ def index(request):
     
     if User.is_authenticated:   
         listings = Listing.objects.filter(sold=False)
-        watchlist = Watchlist.objects.get(user=request.user.id)
-        no_watchlist=watchlist.listings.count()
+        
+        try:
+            watchlist = Watchlist.objects.get(user=request.user.id)
+            no_watchlist=watchlist.listings.count()
+        except Watchlist.DoesNotExist:
+            no_watchlist = 0
         
         return render(request, "auctions/index.html", {
             'title':'Active Listings',
@@ -163,7 +167,7 @@ def watchlist(request):
 
 
 @login_required
-def remove(request):
+def remove_watchlist(request):
     
     if request.method == 'POST':
         id = int(request.POST['id'])
@@ -195,7 +199,7 @@ def comment(request):
 
 
 @login_required
-def close(request):
+def close_bidding(request):
     
     if request.method == 'POST':
         id = int(request.POST['id'])
@@ -222,15 +226,26 @@ def close(request):
 
 def categories(request):
     
-    categories = Listing.objects.filter(sold=False).values('category').distinct()
-    listings = Listing.objects.all()
-    
     try:
         watchlist = Watchlist.objects.get(user=request.user)
         no_watchlist = watchlist.listings.count()
     except Watchlist.DoesNotExist:
         no_watchlist = 0
-
+    
+    if request.method == 'POST':
+        category = request.POST['category']
+        listings = Listing.objects.filter(sold=False, category=category)
+        
+        return render(request, "auctions/index.html", {
+            'title':category,
+            'listings':listings,
+            'no_watchlist':no_watchlist,
+        })
+    
+    else:
+        categories = Listing.objects.filter(sold=False).values('category').distinct()
+        listings = Listing.objects.all()
+    
     return render(request, 'auctions/category.html', {
         'categories':categories,
         'listings':listings,
