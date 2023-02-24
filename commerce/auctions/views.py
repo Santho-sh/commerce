@@ -94,7 +94,7 @@ def create(request):
                 category=category,
                 )
             lg.save()
-            messages.success('New Listing Created Successfully')
+            messages.success(request, 'New Listing Created Successfully')
             return redirect('/')
         
     else:
