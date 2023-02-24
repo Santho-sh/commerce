@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Max
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 from .models import User, Listing, Bid, Comment, Winner, Watchlist
 from .forms import CreateForm
 
@@ -54,7 +54,7 @@ def listing(request, id):
     comments = Comment.objects.filter(listing=product)
     
     try:
-        watchlist = Watchlist.objects.get(user=request.user)
+        watchlist = Watchlist.objects.get(user=request.user.id)
         no_watchlist = watchlist.listings.count()
     except Watchlist.DoesNotExist:
         no_watchlist = 0
@@ -94,13 +94,14 @@ def create(request):
                 category=category,
                 )
             lg.save()
+            messages.success('New Listing Created Successfully')
             return redirect('/')
         
     else:
         form = CreateForm()
         
     try:
-        watchlist = Watchlist.objects.get(user=request.user)
+        watchlist = Watchlist.objects.get(user=request.user.id)
         no_watchlist = watchlist.listings.count()
     except Watchlist.DoesNotExist:
         no_watchlist = 0
@@ -129,6 +130,7 @@ def bid(request, id):
             listing = Listing.objects.get(pk=id)
             listing.current_price = bid_amount
             listing.save()
+            messages.success(request, 'You\'ve successfully placed your bid.')
         
     return redirect('/listing/%i' %id)
     
@@ -140,18 +142,18 @@ def watchlist(request):
         
         id = int(request.POST['id'])
         try:
-            watchlist = Watchlist.objects.get(user=request.user)
+            watchlist = Watchlist.objects.get(user=request.user.id)
         except Watchlist.DoesNotExist:
-            watchlist = Watchlist.objects.create(user=request.user)
+            watchlist = Watchlist.objects.create(user=request.user.id)
             
         listing = Listing.objects.get(pk=id)
         watchlist.listings.add(listing)
-        
+        messages.success(request, 'This listing has been added to your watchlist.')
         return redirect('/listing/%i' %id)
     
     else:
         try:
-            user = Watchlist.objects.get(user=request.user)
+            user = Watchlist.objects.get(user=request.user.id)
             listings_all = user.listings.all()
             no_watchlist=user.listings.count()
         except Watchlist.DoesNotExist:
@@ -171,10 +173,10 @@ def remove_watchlist(request):
     
     if request.method == 'POST':
         id = int(request.POST['id'])
-        watchlist = Watchlist.objects.get(user=request.user)
+        watchlist = Watchlist.objects.get(user=request.user.id)
         listing = Listing.objects.get(pk=id)
         watchlist.listings.remove(listing)
-        
+        messages.warning(request, 'Listing removed from watchlist.')
     return redirect('/watchlist')
 
 
@@ -218,6 +220,7 @@ def close_bidding(request):
             price=price
         )
         win.save()
+        messages.warning(request, 'Auction Closed')
         return redirect('/listing/%i' %id)
     
     else:
@@ -227,7 +230,7 @@ def close_bidding(request):
 def categories(request):
     
     try:
-        watchlist = Watchlist.objects.get(user=request.user)
+        watchlist = Watchlist.objects.get(user=request.user.id)
         no_watchlist = watchlist.listings.count()
     except Watchlist.DoesNotExist:
         no_watchlist = 0
@@ -258,7 +261,7 @@ def myListings(request):
     
     listings = Listing.objects.filter(seller=request.user)
     try:
-        watchlist = Watchlist.objects.get(user=request.user)
+        watchlist = Watchlist.objects.get(user=request.user.id)
         no_watchlist = watchlist.listings.count()
     except Watchlist.DoesNotExist:
         no_watchlist = 0

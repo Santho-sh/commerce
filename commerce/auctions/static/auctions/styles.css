@@ -144,3 +144,24 @@ a:hover {
         padding: 1rem;
     }
 }
+
+.messages li {
+    list-style: none;
+    padding: 7px !important;
+    background-color: #f8d7da !important;
+    color: #721c24 !important;
+    margin-bottom: 10px !important;
+    border-radius: 5px;
+}
+
+.messages li.success {
+    background-color: #dff0d8 !important;
+    border: 1px solid #d6e9c6 !important;
+    color: #3c763d !important;
+  }
+  
+.messages li.warning {
+    background-color: #fcf8e3 !important;
+    border: 1px solid #faebcc !important;
+    color: #8a6d3b !important;
+}
