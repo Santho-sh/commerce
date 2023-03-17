@@ -5,7 +5,6 @@ from django.db import models
 class User(AbstractUser):
     pass
 
-
 class Listing(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
